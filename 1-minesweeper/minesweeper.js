@@ -36,17 +36,17 @@ for(i = 0; i < mines; i++){
     var rndI = Math.floor(Math.random() * row);
     var rndJ = Math.floor(Math.random() * column);
     var ar = boxRow[rndI];
-    while (ar[rndJ].item == 'O'){
+    while (ar[rndJ].item == 'Q'){
         var rndI = Math.floor(Math.random() * row);
         var rndJ = Math.floor(Math.random() * column);
         var ar = boxRow[rndI];
     }
-    ar[rndJ] = {item: 'O', state: 0};
+    ar[rndJ] = {item: 'Q', state: 0};
     for (r = -1; r < 2; r++){
         for (c = -1; c < 2; c++){
             if (c + rndJ >= 0 && c + rndJ <= column - 1 && r + rndI >= 0 && r + rndI <= row - 1){
                 var arr = boxRow[r + rndI]
-                if (arr[c + rndJ].item != 'O'){
+                if (arr[c + rndJ].item != 'Q'){
                     if (arr[c + rndJ].item == ' '){
                         arr[c + rndJ].item = '0';
                     }
@@ -67,6 +67,9 @@ var openBox = function(i,j,item){
     ctx.strokeRect(i * (boxSize),j * (boxSize),boxSize,boxSize);
 
     ctx.fillStyle = "#333333";
+    if(item == 'Q'){
+        item = 'X';
+    }
     ctx.fillText(item, i * (boxSize) + boxSize / 2 - fontSize/3,j * (boxSize) + boxSize / 2 + fontSize/3);
 }
 
@@ -86,9 +89,9 @@ var drawBombs = function(){
     for (i = 0; i < row; i++ ){
         var boxColumn = boxRow[i];
         for (j = 0; j < column; j++){
-            if (boxColumn[j].item == 'O'){
-                ctx.fillStyle = "#bbbbbb";
-                ctx.fillText('O', i * (boxSize) + boxSize / 2 - fontSize/3,j * (boxSize) + boxSize / 2 + fontSize/3);
+            if (boxColumn[j].item == 'Q' && boxColumn[j].state != 1){
+                ctx.fillStyle = "#ffffff";
+                ctx.fillText('Q', i * (boxSize) + boxSize / 2 - fontSize/3,j * (boxSize) + boxSize / 2 + fontSize/3);
             }
         }
     }
@@ -103,7 +106,7 @@ var check = function(i,j){
     console.log(item);
     openBox(i,j,item);
     ar[j].state = 1;
-    if(item == 'O'){
+    if(item == 'Q'){
         console.log('you lost');
         gameover = true;
         drawBombs();
